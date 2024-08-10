@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "push": "dotenv -e .env.local -- npx prisma db push",
-    "pull": "dotenv -e .env.local -- npx prisma db pull"
+    "pull": "dotenv -e .env.local -- npx prisma db pull",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@clerk/nextjs": "^5.2.14",
