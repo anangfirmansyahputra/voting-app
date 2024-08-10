@@ -31,7 +31,7 @@ export default async function VotePage({
   const token = cookieStore.get("vote_app");
 
   const headersList = headers();
-  const ip = headersList.get("x-forwarded-for") || "121.0.0.1";
+  const ip = headersList.get("x-forwarded-for") || "121.k0.0.1";
 
   console.log(ip);
 
