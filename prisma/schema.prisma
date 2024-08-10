@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
 model Event {
@@ -13,7 +12,7 @@ model Event {
   userId      String
   name        String
   player      Int
-  notes       String?  @db.VarChar(1000)
+  notes       String?  @db.LongText
   play        Boolean  @default(false)
   isPublished Boolean  @default(false)
   duration    Int
@@ -30,12 +29,12 @@ model Player {
   point       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  avatar      String?  @db.VarBit(100)
+  avatar      String?  @db.LongText
   description String?
   name        String?
   isCreated   Boolean  @default(false)
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 
-  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
-
+  @@index([eventId], map: "players_eventId_fkey")
   @@map("players")
 }
