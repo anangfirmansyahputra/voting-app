@@ -11,7 +11,7 @@ export const AvatarComponent = ({
   size?: number;
 }) => {
   useEffect(() => {
-    const svg = avatar(id, { size: size || 200 });
+    const svg = avatar(id, { size: size ? size : "100%" });
     // @ts-ignore
     document.getElementById(`avatar${id}`).innerHTML = svg;
   }, [id, size]); // Empty dependency array to run only on mount

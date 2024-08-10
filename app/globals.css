@@ -69,3 +69,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+.vote-container {
+  position: relative;
+}
+
+.vote-item {
+  position: absolute;
+  transition: transform 0.5s ease, top 0.5s ease; /* Menambahkan transisi pada transform dan top */
+  width: 100%; /* Pastikan elemen memenuhi lebar kontainer */
+  box-sizing: border-box; /* Menghindari masalah perhitungan lebar */
+}

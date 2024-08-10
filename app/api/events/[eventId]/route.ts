@@ -3,6 +3,39 @@ import { randomString } from "@/lib/generator";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
+export async function GET(
+  req: Request,
+  { params }: { params: { eventId: string } }
+) {
+  try {
+    const { userId } = auth();
+
+    if (!userId) {
+      return new NextResponse("Unauthorize", { status: 401 });
+    }
+
+    const event = await db.event.findFirst({
+      where: {
+        id: params.eventId,
+      },
+      include: {
+        players: true,
+      },
+    });
+
+    if (!event) {
+      return new NextResponse("Event not found", { status: 404 });
+    }
+
+    return NextResponse.json(event);
+  } catch (err: any) {
+    console.log(err);
+    return new NextResponse(err?.message || "Internal server error", {
+      status: 500,
+    });
+  }
+}
+
 export async function POST(
   req: Request,
   { params }: { params: { eventId: string } }

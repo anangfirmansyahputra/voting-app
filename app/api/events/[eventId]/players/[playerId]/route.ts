@@ -1,28 +1,16 @@
 import { db } from "@/lib/db";
-import { auth } from "@clerk/nextjs/server";
-import { headers } from "next/headers";
-import { NextResponse, userAgent } from "next/server";
+import { pusherServer } from "@/lib/pusher";
+import { NextResponse } from "next/server";
 
 export async function GET(
   req: Request,
   { params }: { params: { eventId: string; playerId: string } }
 ) {
   try {
-    // @ts-ignore
-    let ipAddress = req.headers["x-real-ip"] as string;
+    const voteApp = req.headers.get("Vote-App");
 
-    // @ts-ignore
-    const forwardedFor = req.headers["x-forwarded-for"] as string;
-    if (!ipAddress && forwardedFor) {
-      ipAddress = forwardedFor?.split(",").at(0) ?? "Unknown";
-    }
-
-    console.log(forwardedFor);
-
-    const { userId } = auth();
-
-    if (!userId) {
-      return new NextResponse("Unauthorize", { status: 401 });
+    if (!voteApp || voteApp !== params.eventId) {
+      return new NextResponse("Please insert correct data", { status: 400 });
     }
 
     const event = await db.event.findFirst({
@@ -35,6 +23,8 @@ export async function GET(
       return new NextResponse("Event not found", { status: 404 });
     }
 
+    await pusherServer.trigger(event.id, "incoming-message", "anang ganteng");
+
     const player = await db.player.findFirst({
       where: {
         id: params.playerId,
@@ -46,7 +36,25 @@ export async function GET(
       return new NextResponse("Player not found", { status: 404 });
     }
 
-    return NextResponse.json(player);
+    if (!event.play) {
+      return new NextResponse("This vote is closed", { status: 400 });
+    }
+
+    await db.player.update({
+      where: {
+        eventId: params.eventId,
+        id: params.playerId,
+      },
+      data: {
+        point: {
+          increment: 1,
+        },
+      },
+    });
+
+    console.log("anang", "123");
+
+    return new NextResponse("Success to vote", { status: 200 });
   } catch (err: any) {
     console.log(err);
     return new NextResponse(err?.message || "Internal server error", {
