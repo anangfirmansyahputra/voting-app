@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  player      Int
+  notes       String?  @db.LongText
+  play        Boolean  @default(false)
+  isPublished Boolean  @default(false)
+  duration    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  players     Player[]
+
+  @@map("events")
+}
+
+model Player {
+  id          String   @id @default(cuid())
+  eventId     String
+  point       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  avatar      String?  @db.LongText
+  description String?
+  name        String?
+  isCreated   Boolean  @default(false)
+  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@index([eventId], map: "players_eventId_fkey")
+  @@map("players")
+}
