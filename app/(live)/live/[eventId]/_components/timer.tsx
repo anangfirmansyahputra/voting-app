@@ -56,12 +56,8 @@ export default function Timer({ minutes }: { minutes: number }) {
   };
 
   return (
-    <div className="absolute top-5 right-5 bg-white rounded shadow flex items-end space-x-5 max-w-[400px] w-full py-10 justify-between px-8">
-      <h2 className="text-6xl font-bold w-fit">{timer}</h2>
-
-      <p className="font-medium relative">Left</p>
-      {/* {isCompleted ? <h2>Congratulations!</h2> : null} */}
-      {/* <button onClick={onClickReset}>Reset</button> */}
+    <div className="absolute top-5 right-5 bg-white rounded border-primary border-2 shadow flex items-end space-x-5 justify-between p-5">
+      <h2 className="text-4xl font-bold w-fit">{timer}</h2>
     </div>
   );
 }

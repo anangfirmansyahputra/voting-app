@@ -23,7 +23,7 @@ export async function GET(
       return new NextResponse("Event not found", { status: 404 });
     }
 
-    await pusherServer.trigger(event.id, "incoming-message", "anang ganteng");
+    await pusherServer.trigger(event.id, "incoming-message", "");
 
     const player = await db.player.findFirst({
       where: {
@@ -36,7 +36,7 @@ export async function GET(
       return new NextResponse("Player not found", { status: 404 });
     }
 
-    if (!event.play) {
+    if (!event.play || !event.start) {
       return new NextResponse("This vote is closed", { status: 400 });
     }
 
@@ -51,8 +51,6 @@ export async function GET(
         },
       },
     });
-
-    console.log("anang", "123");
 
     return new NextResponse("Success to vote", { status: 200 });
   } catch (err: any) {

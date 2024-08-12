@@ -18,6 +18,7 @@ import { Event, Player } from "@prisma/client";
 import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
+import Cookies from "js-cookie";
 
 type SelectUserProps = {
   event: Event & {
@@ -43,7 +44,7 @@ export default function SelectUser({ event, cookie }: SelectUserProps) {
       });
       setSelect(null);
       setName(null);
-      // Cookies.set("vote_app", event.id);
+      Cookies.set("vote_app", event.id);
       setVoted(true);
       toast("Thank you for your contribution");
     } catch (err: any) {

@@ -8,17 +8,20 @@ datasource db {
 }
 
 model Event {
-  id          String   @id @default(cuid())
-  userId      String
-  name        String
-  player      Int
-  notes       String?  @db.LongText
-  play        Boolean  @default(false)
-  isPublished Boolean  @default(false)
-  duration    Int
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  players     Player[]
+  id            String       @id @default(cuid())
+  userId        String
+  name          String
+  player        Int
+  notes         String?      @db.LongText
+  play          Boolean      @default(false)
+  start         Boolean      @default(false)
+  isPublished   Boolean      @default(false)
+  duration      Int
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  duration_type DurationType @default(MINUTES)
+  players       Player[]
+  image         String?      @db.LongText
 
   @@map("events")
 }
@@ -37,4 +40,9 @@ model Player {
 
   @@index([eventId], map: "players_eventId_fkey")
   @@map("players")
+}
+
+enum DurationType {
+  MINUTES
+  SECOND
 }

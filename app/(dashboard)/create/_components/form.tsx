@@ -19,12 +19,20 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
 import { Event } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
   notes: z.string().optional(),
   player: z.string().min(1).max(2),
   duration: z.string().min(1).max(3),
+  duration_type: z.string(),
 });
 
 export default function FormVote({ event }: { event?: Event }) {
@@ -37,11 +45,13 @@ export default function FormVote({ event }: { event?: Event }) {
       notes: event?.notes || "",
       duration: String(event?.duration) || "0",
       player: String(event?.player) || "0",
+      duration_type: event?.duration_type || "MINUTES",
     } || {
       name: "",
       notes: "",
       duration: "0",
       player: "0",
+      duration_type: "",
     },
   });
 
@@ -122,6 +132,30 @@ export default function FormVote({ event }: { event?: Event }) {
                 <FormDescription>
                   This is duration time of event will be held, please insert in
                   minutes
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="duration"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Duration</FormLabel>
+                <FormControl>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Duraton" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="MINUTES">Minutes</SelectItem>
+                      <SelectItem value="SECOND">Second</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription>
+                  This is type of duration, default value is minutes
                 </FormDescription>
                 <FormMessage />
               </FormItem>

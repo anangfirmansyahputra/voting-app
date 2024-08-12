@@ -54,7 +54,7 @@ export default function EventCard({
         />
       </CardHeader>
       <CardContent className="p-3 space-y-2">
-        <p className="font-medium text-base group-hover:text-primary-foreground">
+        <p className="font-medium text-base group-hover:text-primary-foreground truncate">
           {name}
         </p>
         <div className="flex items-center justify-between">
