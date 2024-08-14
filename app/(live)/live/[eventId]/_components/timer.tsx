@@ -1,11 +1,23 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
-export default function Timer({ minutes }: { minutes: number }) {
+export default function Timer({
+  minutes,
+  setIsCompleted,
+}: {
+  minutes: number;
+  setIsCompleted: Dispatch<SetStateAction<boolean>>;
+}) {
   const Ref = useRef<NodeJS.Timeout | null>(null);
   const [timer, setTimer] = useState("00:00:00");
-  const [isCompleted, setIsCompleted] = useState(false);
+  // const [isCompleted, setIsCompleted] = useState(false);
   const minutesInput = minutes;
 
   const getTimeRemaining = (endtime: Date) => {

@@ -79,7 +79,7 @@ export default function VotePage({ params }: { params: { eventId: string } }) {
 
   return (
     <>
-      <div className="bg-gray-50 min-h-screen h-full overflow-auto p-5">
+      <div className="bg-gray-50 min-h-screen h-dvh overflow-auto p-5">
         <div className="max-w-screen-md flex flex-col md:items-center md:justify-center mx-auto min-h-full space-y-5 sm:space-y-10 w-full">
           <h1 className="text-3xl sm:text-4xl text-center mt-10 md:mt-0 font-semibold uppercase">
             {event!.name}

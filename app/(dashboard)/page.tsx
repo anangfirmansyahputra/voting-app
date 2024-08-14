@@ -17,6 +17,16 @@ export default async function Home() {
     redirect("/sign-in");
   }
 
+  await db.event.updateMany({
+    where: {
+      userId,
+    },
+    data: {
+      start: false,
+      play: false,
+    },
+  });
+
   const events = await db.event.findMany({
     where: {
       userId,

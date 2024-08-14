@@ -26,6 +26,7 @@
     "@types/socket.io": "^3.0.2",
     "animal-avatar-generator": "^1.2.0",
     "axios": "^1.7.3",
+    "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dotenv-cli": "^7.4.2",
@@ -52,6 +53,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.6.4",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",

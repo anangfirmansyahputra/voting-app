@@ -8,11 +8,11 @@ export async function GET(
   { params }: { params: { eventId: string } }
 ) {
   try {
-    const { userId } = auth();
+    // const { userId } = auth();
 
-    if (!userId) {
-      return new NextResponse("Unauthorize", { status: 401 });
-    }
+    // if (!userId) {
+    //   return new NextResponse("Unauthorize", { status: 401 });
+    // }
 
     const event = await db.event.findFirst({
       where: {

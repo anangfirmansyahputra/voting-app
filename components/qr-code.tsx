@@ -3,12 +3,12 @@
 import React from "react";
 import { useQRCode } from "next-qrcode";
 
-export default function QrCode() {
+export default function QrCode({ url }: { url: string }) {
   const { Canvas } = useQRCode();
 
   return (
     <Canvas
-      text={"https://github.com/bunlong/next-qrcode"}
+      text={url}
       options={{
         errorCorrectionLevel: "M",
         margin: 3,

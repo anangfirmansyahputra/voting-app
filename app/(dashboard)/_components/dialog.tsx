@@ -33,6 +33,7 @@ export default function Dialog({
         id,
       });
 
+      router.push(`/live/${id}`);
       router.refresh();
     } catch (err) {
       console.log(err);
