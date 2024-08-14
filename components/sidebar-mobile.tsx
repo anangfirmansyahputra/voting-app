@@ -1,10 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { CalendarRange, Globe } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Footer from "./footer";
+import { cn } from "@/lib/utils";
 
 const MENUS = [
   {
@@ -19,12 +19,12 @@ const MENUS = [
   },
 ];
 
-export default function Sidebar() {
+export default function SidebarMobile() {
   const pathname = usePathname();
 
   return (
-    <div className="pt-[80px] h-full w-72 hidden md:flex flex-col fixed inset-y-0 z-[48p]">
-      <div className="h-full border-r bg-white flex flex-col">
+    <div className="flex flex-col w-full">
+      <div className=" bg-white flex flex-col justify-between">
         <div className="p-3 space-y-1.5 flex-1">
           {MENUS.map((menu) => (
             <Link
@@ -41,7 +41,6 @@ export default function Sidebar() {
             </Link>
           ))}
         </div>
-        <Footer />
       </div>
     </div>
   );
