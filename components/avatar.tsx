@@ -6,15 +6,18 @@ import { useEffect } from "react";
 export const AvatarComponent = ({
   id,
   size,
+  customId,
 }: {
   id: string;
-  size?: number;
+  size?: number | string;
+  customId?: string;
 }) => {
   useEffect(() => {
     const svg = avatar(id, { size: size ? size : "100%" });
     // @ts-ignore
-    document.getElementById(`avatar${id}`).innerHTML = svg;
-  }, [id, size]); // Empty dependency array to run only on mount
+    document.getElementById(customId ? customId : `avatar${id}`).innerHTML =
+      svg;
+  }, [id, size, customId]); // Empty dependency array to run only on mount
 
-  return <div id={`avatar${id}`}></div>;
+  return <div id={customId ? customId : `avatar${id}`}></div>;
 };

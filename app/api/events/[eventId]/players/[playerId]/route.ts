@@ -23,8 +23,6 @@ export async function GET(
       return new NextResponse("Event not found", { status: 404 });
     }
 
-    await pusherServer.trigger(event.id, "incoming-message", "");
-
     const player = await db.player.findFirst({
       where: {
         id: params.playerId,
@@ -51,6 +49,8 @@ export async function GET(
         },
       },
     });
+
+    await pusherServer.trigger(event.id, "incoming-message", "");
 
     return new NextResponse("Success to vote", { status: 200 });
   } catch (err: any) {

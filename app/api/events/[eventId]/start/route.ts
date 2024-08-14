@@ -1,4 +1,5 @@
 import { db } from "@/lib/db";
+import { randomString } from "@/lib/generator";
 import { pusherServer } from "@/lib/pusher";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -36,6 +37,7 @@ export async function GET(
       },
       data: {
         start: !event.start,
+        key: randomString(10) + randomString(4),
       },
     });
 

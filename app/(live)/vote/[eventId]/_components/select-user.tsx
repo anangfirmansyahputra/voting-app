@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Event, Player } from "@prisma/client";
 import axios from "axios";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
 
@@ -25,27 +25,33 @@ type SelectUserProps = {
     players: Player[];
   };
   cookie: string | null;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
-export default function SelectUser({ event, cookie }: SelectUserProps) {
+export default function SelectUser({
+  event,
+  cookie,
+  setOpen,
+}: SelectUserProps) {
   const [select, setSelect] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [voted, setVoted] = useState(false);
 
-  const handleVote = async () => {
+  const handleVote = async (playerId: string) => {
     setIsLoading(true);
 
     try {
-      await axios.get(`/api/events/${event.id}/players/${select}`, {
+      await axios.get(`/api/events/${event.id}/players/${playerId}`, {
         headers: {
           "Vote-App": event.id,
         },
       });
       setSelect(null);
       setName(null);
-      Cookies.set("vote_app", event.id);
+      Cookies.set("vote_app", event.key);
       setVoted(true);
+      setOpen(true);
       toast("Thank you for your contribution");
     } catch (err: any) {
       console.log(err);
@@ -68,7 +74,7 @@ export default function SelectUser({ event, cookie }: SelectUserProps) {
             }}
             key={player.id}
             className={cn(
-              "w-full p-10 md:p-5 flex flex-col items-center space-y-5 border aspect-square justify-center bg-white rounded-lg hover:border-primary transition-all",
+              "relative w-full p-10 md:p-5 flex flex-col border-2 items-center space-y-5 aspect-square justify-center bg-white rounded-lg group hover:border-primary transition-all",
               select === player.id && "border-primary"
             )}
           >
@@ -76,36 +82,39 @@ export default function SelectUser({ event, cookie }: SelectUserProps) {
             <div className="">
               <AvatarComponent id={player.avatar!} size={150} />
             </div>
+
+            <div className="opacity-0 transition-opacity duration-150 absolute group-hover:opacity-100 flex bg-[#222121b6] w-full h-full -top-5 left-0 rounded-lg items-center justify-center px-5">
+              {/* <Button>Select</Button> */}
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="w-full" disabled={isLoading}>
+                    Submit
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. You will vote{" "}
+                      <span className="font-bold">{name}</span> for event{" "}
+                      <span className="font-bold">{event.name}</span>. So, make
+                      sure for that
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => handleVote(player.id)}>
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
           </div>
         ))}
       </div>
-
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button
-            className="w-full text-lg py-7"
-            size={"lg"}
-            disabled={!voted || isLoading || select !== null ? false : true}
-          >
-            Submit
-          </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. You will vote{" "}
-              <span className="font-bold">{name}</span> for event{" "}
-              <span className="font-bold">{event.name}</span>. So, make sure for
-              that
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleVote}>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

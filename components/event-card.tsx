@@ -47,7 +47,7 @@ export default function EventCard({
     >
       <CardHeader className="relative aspect-video">
         <Image
-          src={"/assets/card.webp"}
+          src={"/assets/4409002.jpg"}
           alt={name}
           fill
           className="absolute object-cover"

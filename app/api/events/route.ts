@@ -23,6 +23,7 @@ export async function POST(req: Request) {
         isPublished,
         duration,
         userId,
+        key: randomString(10) + randomString(4),
       },
     });
 

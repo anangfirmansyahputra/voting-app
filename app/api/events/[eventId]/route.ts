@@ -27,6 +27,17 @@ export async function GET(
       return new NextResponse("Event not found", { status: 404 });
     }
 
+    // for (const player of event.players) {
+    //   await db.player.update({
+    //     where: {
+    //       id: player.id,
+    //     },
+    //     data: {
+    //       point: 0,
+    //     },
+    //   });
+    // }
+
     return NextResponse.json(event);
   } catch (err: any) {
     console.log(err);

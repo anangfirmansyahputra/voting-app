@@ -40,7 +40,7 @@ import { useEffect, useState } from "react";
 import FlipMove from "react-flip-move";
 import Timer from "./_components/timer";
 import { useAuth } from "@clerk/nextjs";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
 import Winner from "./_components/winner";
 
@@ -59,24 +59,34 @@ export default function LivePage({ params }: { params: { eventId: string } }) {
   const router = useRouter();
 
   if (!isLoaded || !userId) {
-    router.push("/");
+    redirect("/");
+  }
+
+  if (event) {
+    if (!event.play) {
+      redirect("/");
+    }
   }
 
   const fetchData = async () => {
-    const { data }: { data: EventWithPlayers } = await axios.get(
-      `/api/events/${params.eventId}`
-    );
-    setEvent(data);
-    setIsStart(data.start);
-    setSortedPlayers(
-      (data as EventWithPlayers).players.sort((a, b) => b.point - a.point)
-    );
-    setTotalVotes(
-      (data as EventWithPlayers).players.reduce(
-        (sum, item) => sum + item.point,
-        0
-      )
-    );
+    try {
+      const { data }: { data: EventWithPlayers } = await axios.get(
+        `/api/events/${params.eventId}`
+      );
+      setEvent(data);
+      setIsStart(data.start);
+      setSortedPlayers(
+        (data as EventWithPlayers).players.sort((a, b) => b.point - a.point)
+      );
+      setTotalVotes(
+        (data as EventWithPlayers).players.reduce(
+          (sum, item) => sum + item.point,
+          0
+        )
+      );
+    } catch (err: any) {
+      router.push("/");
+    }
   };
 
   const handleStart = async () => {
@@ -116,7 +126,6 @@ export default function LivePage({ params }: { params: { eventId: string } }) {
         }
       })();
       setIsStart(false);
-      router.refresh();
     } catch (err: any) {
       console.log(err);
     }

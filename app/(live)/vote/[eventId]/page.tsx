@@ -36,7 +36,7 @@ export default function VotePage({ params }: { params: { eventId: string } }) {
       setEvent(data);
       setToken(token);
 
-      if (token === data.id || !data.start) {
+      if (token === data.key || !data.start) {
         setOpen(true);
       }
 
@@ -59,7 +59,7 @@ export default function VotePage({ params }: { params: { eventId: string } }) {
       const event = await fetchEvent();
       const token = Cookies.get("vote_app") || null;
 
-      if (event?.start && event.play && token !== event.id) {
+      if (event?.start && event.play && token !== event.key) {
         setOpen(false);
       }
     });
@@ -84,7 +84,7 @@ export default function VotePage({ params }: { params: { eventId: string } }) {
           <h1 className="text-3xl sm:text-4xl text-center mt-10 md:mt-0 font-semibold uppercase">
             {event!.name}
           </h1>
-          <SelectUser event={event!} cookie={token} />
+          <SelectUser event={event!} cookie={token} setOpen={setOpen} />
         </div>
       </div>
       <AlertDialog open={open}>

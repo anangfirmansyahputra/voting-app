@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Player } from "@prisma/client";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 
 export default function Winner({
   player,
@@ -27,6 +27,7 @@ export default function Winner({
   const handleReset = async () => {
     await fetchData();
     setOpen(false);
+    window.location.reload();
   };
 
   return (
@@ -46,7 +47,11 @@ export default function Winner({
                 {player.point}
               </h2>
             </div>
-            <AvatarComponent id={player.id} />
+            <AvatarComponent
+              customId={"custom-avatar" + player.avatar}
+              id={player.avatar!}
+              size={"100%"}
+            />
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="mt-5">

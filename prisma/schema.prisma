@@ -22,6 +22,7 @@ model Event {
   duration_type DurationType @default(MINUTES)
   players       Player[]
   image         String?      @db.LongText
+  key           String       @unique
 
   @@map("events")
 }
