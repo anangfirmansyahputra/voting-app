@@ -38,6 +38,7 @@ model Player {
   name        String?
   isCreated   Boolean  @default(false)
   event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  image       String?  @db.LongText
 
   @@index([eventId], map: "players_eventId_fkey")
   @@map("players")

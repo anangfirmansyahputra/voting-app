@@ -17,12 +17,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import avatar from "animal-avatar-generator";
 import { randomString } from "@/lib/generator";
 import { AvatarComponent } from "@/components/avatar";
+import { Upload } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
@@ -44,7 +45,16 @@ export default function FormPlayer({
 }) {
   const [edit, setEdit] = useState(false);
   const [avatarCode, setAvatarCode] = useState(avatar);
+  const [file, setFile] = useState<File | undefined>();
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
+
+  const handleClick = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,6 +69,7 @@ export default function FormPlayer({
       const { data } = await axios.post(`/api/players/${playerId}`, {
         ...values,
         avatar: avatarCode,
+        image: file,
       });
       toast({
         title: "Success",
@@ -70,6 +81,13 @@ export default function FormPlayer({
       console.log(err);
     }
   }
+
+  // async function handleUpload() {
+  //   try {
+  //   } catch (err: any) {
+  //     console.log();
+  //   }
+  // }
 
   return (
     <>
@@ -108,14 +126,56 @@ export default function FormPlayer({
             </div>
             <div className="relative w-[200px] h-[200px] mx-auto">
               <div className=" flex flex-col space-y-5 items-center">
-                <AvatarComponent id={avatarCode!} />
+                {previewImage ? (
+                  <Image
+                    src={previewImage}
+                    alt="Image"
+                    width={200}
+                    height={200}
+                    className="rounded-full border aspect-square object-contain object-center"
+                  />
+                ) : (
+                  <AvatarComponent id={avatarCode!} />
+                )}
                 {edit && (
-                  <Button
-                    type="button"
-                    onClick={() => setAvatarCode(randomString(10))}
-                  >
-                    Generate
-                  </Button>
+                  <div className="flex gap-2">
+                    {!previewImage && (
+                      <Button
+                        type="button"
+                        onClick={() => setAvatarCode(randomString(10))}
+                      >
+                        Generate
+                      </Button>
+                    )}
+
+                    <div>
+                      <Input
+                        type="file"
+                        ref={(e) => {
+                          inputRef.current = e;
+                        }}
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) {
+                            const imageUrl = URL.createObjectURL(file);
+                            setPreviewImage(imageUrl);
+                            setFile(file);
+                          }
+                        }}
+                        style={{ display: "none" }} // Sembunyikan input file
+                      />
+                      {edit && (
+                        <Button
+                          type="button"
+                          onClick={handleClick}
+                          variant={"outline"}
+                        >
+                          Upload Image
+                        </Button>
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
             </div>

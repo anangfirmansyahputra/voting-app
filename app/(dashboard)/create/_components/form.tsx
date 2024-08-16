@@ -139,7 +139,7 @@ export default function FormVote({ event }: { event?: Event }) {
           />
           <FormField
             control={form.control}
-            name="duration"
+            name="duration_type"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Duration</FormLabel>

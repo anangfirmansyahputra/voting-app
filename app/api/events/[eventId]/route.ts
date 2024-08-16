@@ -1,7 +1,9 @@
-import { db } from "@/lib/db";
 import { randomString } from "@/lib/generator";
+import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
+import { writeFile } from "fs/promises";
 import { NextResponse } from "next/server";
+import path from "path";
 
 export async function GET(
   req: Request,
@@ -70,11 +72,28 @@ export async function POST(
 
     const { name, description } = await req.json();
 
+    const formData = await req.formData();
+    const file = formData.get("file") as File | null;
+
+    let nameFile;
+
+    if (file) {
+      const buffer = Buffer.from(await file.arrayBuffer());
+      const filename = Date.now() + file.name.replaceAll(" ", "_");
+      await writeFile(
+        path.join(process.cwd(), "public/uploads/" + filename),
+        buffer
+      );
+
+      nameFile = filename;
+    }
+
     const player = await db.player.create({
       data: {
         eventId: params.eventId,
         description,
         name,
+        image: nameFile,
       },
     });
 

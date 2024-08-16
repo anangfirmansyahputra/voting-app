@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "next start",
     "lint": "next lint",
     "push": "dotenv -e .env.local -- npx prisma db push",
     "pull": "dotenv -e .env.local -- npx prisma db pull",
