@@ -8,11 +8,15 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { UserButton } from "@clerk/nextjs";
-import { Menu } from "lucide-react";
+import { LogIn, Menu } from "lucide-react";
 import Image from "next/image";
 import SidebarMobile from "./sidebar-mobile";
+import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
 
-export default function Navbar() {
+export default function Navbar({ userId }: { userId: string | null }) {
+  const router = useRouter();
+
   return (
     <div className="h-[80px] inset-y-0 w-full z-[49] fixed">
       <div className="p-4 gap-x h-full bg-white border-b flex items-center justify-between">
@@ -21,34 +25,44 @@ export default function Navbar() {
           alt="Voting App"
           width={160}
           height={150}
-          className="aspect-video"
+          className="aspect-video md:block hidden"
         />
-        <div className="border flex items-center rounded overflow-hidden">
-          {/* <input />
-          <Button
-            size={"icon"}
-            className="w-8 h-8 rounded-none"
-            variant={"secondary"}
-          >
-            <X />
-          </Button>
-          <Button size={"icon"} className="w-8 h-8 rounded-none">
-            <Search />
-          </Button> */}
+        <Image
+          src={"/assets/LOGO VOTING APP.png"}
+          alt="Voting App"
+          width={50}
+          height={60}
+          className="aspect-video object-cover block md:hidden ml-2"
+        />
+        <div className="border flex items-center rounded overflow-hidden"></div>
+        <div className="hidden lg:block">
+          {userId ? (
+            <UserButton />
+          ) : (
+            <Button
+              variant={"outline"}
+              className="flex items-center space-x-1"
+              onClick={() => router.push("/sign-in")}
+            >
+              <span>Login</span>
+              <LogIn className="w-5 h-5 text-[#222]" />
+            </Button>
+          )}
         </div>
-        <div className="hidden md:block">
-          <UserButton />
-        </div>
-        <div className="block md:hidden">
+        <div className="block lg:hidden">
           <Sheet>
             <SheetTrigger asChild>
               <Menu />
             </SheetTrigger>
             <SheetContent>
               <SheetHeader>
-                <SheetDescription>
-                  <UserButton />
-                  <SidebarMobile />
+                <SheetDescription className="mt-5">
+                  <>
+                    <div className="mx-3 border border-dashed rounded-lg py-2 flex items-center justify-center bg-gray-50 shadow">
+                      <UserButton />
+                    </div>
+                    <SidebarMobile />
+                  </>
                 </SheetDescription>
               </SheetHeader>
             </SheetContent>

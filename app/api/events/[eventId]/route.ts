@@ -205,6 +205,13 @@ export async function DELETE(
       return new NextResponse("Event not found", { status: 404 });
     }
 
+    if (event.play || event.start) {
+      return new NextResponse(
+        "You cannot delete this event because this event still playing",
+        { status: 400 }
+      );
+    }
+
     await db.event.delete({
       where: {
         id: params.eventId,

@@ -37,7 +37,7 @@ export async function GET(
       },
       data: {
         start: !event.start,
-        key: randomString(10) + randomString(4),
+        key: randomString(6),
       },
     });
 

@@ -99,7 +99,7 @@ export default function FormPlayer({
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="grid grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-2 gap-5">
             <div className="space-y-5">
               <FormField
                 disabled={!edit}
@@ -153,14 +153,14 @@ export default function FormPlayer({
                 )}
                 {edit && (
                   <div className="flex gap-2">
-                    {!previewImage && (
+                    {/* {!previewImage && (
                       <Button
                         type="button"
                         onClick={() => setAvatarCode(randomString(10))}
                       >
                         Generate
                       </Button>
-                    )}
+                    )} */}
 
                     <div>
                       <Input
@@ -196,7 +196,7 @@ export default function FormPlayer({
           </div>
 
           {edit && (
-            <div className="flex gap-3">
+            <div className="flex gap-3]">
               <Button type="submit">Update</Button>
             </div>
           )}

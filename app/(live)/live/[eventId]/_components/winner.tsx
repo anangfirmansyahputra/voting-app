@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Player } from "@prisma/client";
+import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 
 export default function Winner({
@@ -47,16 +48,33 @@ export default function Winner({
                 {player.point}
               </h2>
             </div>
-            <AvatarComponent
-              customId={"custom-avatar" + player.avatar}
-              id={player.avatar!}
-              size={"100%"}
-            />
+            {player.image ? (
+              <Image
+                src={"/uploads/" + player.image}
+                alt={player.name!}
+                width={800}
+                height={800}
+                className="object-cover rounded-full border shadow"
+              />
+            ) : (
+              <AvatarComponent
+                customId={"custom-avatar" + player.avatar}
+                id={player.avatar!}
+                size={"100%"}
+              />
+            )}
           </DialogDescription>
         </DialogHeader>
-        <DialogFooter className="mt-5">
+        <DialogFooter className="mt-5 grid grid-cols-2 gap-5">
+          <Button
+            className="w-full"
+            variant={"secondary"}
+            onClick={() => setOpen(false)}
+          >
+            Cancel
+          </Button>
           <Button className="w-full" onClick={handleReset}>
-            Okay
+            Reset
           </Button>
         </DialogFooter>
       </DialogContent>

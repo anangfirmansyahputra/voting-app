@@ -17,10 +17,10 @@ export default function DashboardLayout({
 
   return (
     <>
-      <Navbar />
+      <Navbar userId={userId} />
       <div className="flex pt-[80px]">
         <Sidebar />
-        <div className="md:pl-72 bg-gray-50 w-full h-full min-h-[calc(100vh-80px)]">
+        <div className="lg:pl-72 bg-gray-50 w-full h-full min-h-[calc(100vh-80px)]">
           {children}
         </div>
       </div>

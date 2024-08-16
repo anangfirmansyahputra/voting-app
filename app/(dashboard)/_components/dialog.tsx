@@ -73,6 +73,16 @@ export default function Dialog({
                   : "This action will start your event voting and will be stoped automatically until the duration is finish"
               }`}
             </AlertDialogDescription>
+            <AlertDialogDescription className="px-5">
+              <ul className="list-disc space-y-5">
+                <li>{`"If the event has started, do not refresh the page as this will
+              restart the event with the same points, but the duration will
+              reset to the beginning."`}</li>
+                <li>{` "Do not refresh the page because it will
+              reset the countdown duration, but it will not affect the point
+              value."`}</li>
+              </ul>
+            </AlertDialogDescription>
           </AlertDialogHeader>
         )}
 

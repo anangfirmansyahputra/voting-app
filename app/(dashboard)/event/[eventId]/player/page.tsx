@@ -50,7 +50,7 @@ export default async function EventPage({
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 gap-5">
         {event?.players.map((player, index) => (
           <Card key={index}>
             <CardHeader className="flex flex-row items-start justify-between">

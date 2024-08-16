@@ -1,10 +1,10 @@
 "use client";
 
-import { CalendarRange, Globe } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { CalendarRange, Globe, Vote } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import Footer from "./footer";
-import { cn } from "@/lib/utils";
+import { SheetClose } from "./ui/sheet";
 
 const MENUS = [
   {
@@ -17,6 +17,11 @@ const MENUS = [
     href: "/event",
     icon: <CalendarRange className="mr-2" />,
   },
+  {
+    label: "Join",
+    href: "/join",
+    icon: <Vote className="mr-2" />,
+  },
 ];
 
 export default function SidebarMobile() {
@@ -27,18 +32,26 @@ export default function SidebarMobile() {
       <div className=" bg-white flex flex-col justify-between">
         <div className="p-3 space-y-1.5 flex-1">
           {MENUS.map((menu) => (
-            <Link
-              key={menu.label}
-              href={menu.href}
-              className={cn(
-                "flex w-full text-sm text-muted-foreground items-center py-3.5 px-3 hover:text-primary-foreground hover:bg-primary/80 rounded-lg transition-all group hover:font-medium",
-                pathname === menu.href &&
-                  "bg-primary/80 text-primary-foreground"
-              )}
-            >
-              {menu.icon}
-              {menu.label}
-            </Link>
+            <SheetClose asChild key={menu.label}>
+              <Link
+                href={menu.href}
+                className={cn(
+                  "flex w-full text-sm text-muted-foreground items-center py-3.5 px-3 hover:text-primary-foreground hover:bg-primary/80 rounded-lg transition-all group hover:font-medium",
+                  // Kondisi untuk path '/'
+                  pathname === "/" &&
+                    menu.href === "/" &&
+                    "bg-primary/80 text-primary-foreground",
+                  // Kondisi untuk path selain '/'
+                  pathname !== "/" &&
+                    pathname.startsWith(menu.href) &&
+                    menu.href !== "/" &&
+                    "bg-primary/80 text-primary-foreground"
+                )}
+              >
+                {menu.icon}
+                {menu.label}
+              </Link>
+            </SheetClose>
           ))}
         </div>
       </div>

@@ -43,6 +43,7 @@ import { useAuth } from "@clerk/nextjs";
 import { redirect, useRouter } from "next/navigation";
 import confetti from "canvas-confetti";
 import Winner from "./_components/winner";
+import Image from "next/image";
 
 type EventWithPlayers = Event & {
   players: Player[];
@@ -207,15 +208,21 @@ export default function LivePage({ params }: { params: { eventId: string } }) {
           </AlertDialog>
           <Dialog>
             <DialogTrigger asChild>
-              <Button size={"icon"} variant={"outline"}>
-                <ScanQrCode />
-              </Button>
+              {!event?.start && (
+                <Button size={"icon"} variant={"outline"}>
+                  <ScanQrCode />
+                </Button>
+              )}
             </DialogTrigger>
             <DialogContent>
               <DialogHeader className="space-y-5">
                 <DialogTitle className="text-center">QR Code</DialogTitle>
                 <DialogDescription className="flex items-center justify-center">
                   <QrCode url={url} />
+                </DialogDescription>
+
+                <DialogDescription className="text-center text-3xl underline">
+                  <p>{event?.key}</p>
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter className="sm:justify-start">
@@ -279,7 +286,17 @@ export default function LivePage({ params }: { params: { eventId: string } }) {
                         )}
                       </div>
                       <div className="mx-auto flex items-center justify-center">
-                        <AvatarComponent id={player.avatar!} size={100} />
+                        {player.image ? (
+                          <Image
+                            src={"/uploads/" + player.image}
+                            width={100}
+                            height={100}
+                            className="aspect-square border rounded-full object-cover"
+                            alt={player.name!}
+                          />
+                        ) : (
+                          <AvatarComponent id={player.avatar!} size={100} />
+                        )}
                       </div>
                     </div>
                     <div

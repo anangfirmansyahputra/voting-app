@@ -19,6 +19,7 @@ import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
+import Image from "next/image";
 
 type SelectUserProps = {
   event: Event & {
@@ -74,13 +75,24 @@ export default function SelectUser({
             }}
             key={player.id}
             className={cn(
-              "relative w-full p-10 md:p-5 flex flex-col border-2 items-center space-y-5 aspect-square justify-center bg-white rounded-lg group hover:border-primary transition-all",
+              "relative h-full w-full p-10 md:p-5 flex flex-col border-2 items-center space-y-5 aspect-square justify-center bg-white rounded-lg group hover:border-primary transition-all",
               select === player.id && "border-primary"
             )}
           >
-            <h5 className="font-medium text-2xl">{player.name}</h5>
-            <div className="">
-              <AvatarComponent id={player.avatar!} size={150} />
+            <h5 className="font-medium text-2xl text-center">{player.name}</h5>
+            <div className="flex-1 flex items-end">
+              {player.image ? (
+                <div className="relative aspect-square w-[150px] h-[150px] rounded-full border shadow overflow-hidden">
+                  <Image
+                    alt={player.name!}
+                    fill
+                    src={`/uploads/${player.image}`}
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <AvatarComponent id={player.avatar!} size={150} />
+              )}
             </div>
 
             <div className="opacity-0 transition-opacity duration-150 absolute group-hover:opacity-100 flex bg-[#222121b6] w-full h-full -top-5 left-0 rounded-lg items-center justify-center px-5">

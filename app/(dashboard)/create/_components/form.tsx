@@ -1,9 +1,5 @@
 "use client";
 
-import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,21 +13,18 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/components/ui/use-toast";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Event } from "@prisma/client";
+import axios from "axios";
 import { useRouter } from "next/navigation";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
 const formSchema = z.object({
-  name: z.string().min(2).max(50),
+  name: z.string().min(3).max(50),
   notes: z.string().optional(),
-  player: z.string().min(1).max(2),
-  duration: z.string().min(1).max(3),
+  player: z.number().min(2).max(10, "You can insert max 10 player"),
+  duration: z.number().min(1).max(1140, "Max duration is 1 day (1140)"),
   duration_type: z.string(),
 });
 
@@ -43,14 +36,14 @@ export default function FormVote({ event }: { event?: Event }) {
     defaultValues: {
       name: event?.name! || "",
       notes: event?.notes || "",
-      duration: String(event?.duration) || "0",
-      player: String(event?.player) || "0",
+      duration: Number(event?.duration) || 1,
+      player: Number(event?.player) || 1,
       duration_type: event?.duration_type || "MINUTES",
     } || {
       name: "",
       notes: "",
-      duration: "0",
-      player: "0",
+      duration: 1,
+      player: 1,
       duration_type: "",
     },
   });
@@ -81,13 +74,17 @@ export default function FormVote({ event }: { event?: Event }) {
       router.refresh();
     } catch (err) {
       console.log(err);
+      toast({
+        title: "Error",
+        description: "Create event failed, please try again",
+      });
     }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid md:grid-cols-2 gap-5">
           <FormField
             control={form.control}
             name="name"
@@ -109,17 +106,28 @@ export default function FormVote({ event }: { event?: Event }) {
               <FormItem>
                 <FormLabel>Player</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="0" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    {...field}
+                    value={field.value || ""}
+                    onChange={(e) => {
+                      const value =
+                        e.target.value === "" ? 0 : Number(e.target.value);
+                      field.onChange(value);
+                    }}
+                  />
                 </FormControl>
                 <FormDescription>
-                  This is how much player can be vote.
+                  This is how much player can be vote. Minimum is 1 and max is
+                  10
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
         </div>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid md:grid-cols-2 gap-5">
           <FormField
             control={form.control}
             name="duration"
@@ -127,7 +135,17 @@ export default function FormVote({ event }: { event?: Event }) {
               <FormItem>
                 <FormLabel>Duration</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="0" {...field} />
+                  <Input
+                    type="number"
+                    placeholder="0"
+                    {...field}
+                    value={field.value || ""}
+                    onChange={(e) => {
+                      const value =
+                        e.target.value === "" ? 0 : Number(e.target.value);
+                      field.onChange(value);
+                    }}
+                  />
                 </FormControl>
                 <FormDescription>
                   This is duration time of event will be held, please insert in
@@ -137,7 +155,7 @@ export default function FormVote({ event }: { event?: Event }) {
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="duration_type"
             render={({ field }) => (
@@ -160,7 +178,7 @@ export default function FormVote({ event }: { event?: Event }) {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
         </div>
         <FormField
           control={form.control}
