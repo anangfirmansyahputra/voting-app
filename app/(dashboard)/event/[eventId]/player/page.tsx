@@ -71,6 +71,7 @@ export default async function EventPage({
                 avatar={player.avatar}
                 eventId={params.eventId}
                 playerId={player.id}
+                image={player.image}
               />
             </CardContent>
           </Card>

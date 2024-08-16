@@ -36,12 +36,14 @@ export default function FormPlayer({
   name,
   description,
   avatar,
+  image,
 }: {
   eventId: string;
   playerId: string;
   name?: string | null;
   description?: string | null;
   avatar?: string | null;
+  image?: string | null;
 }) {
   const [edit, setEdit] = useState(false);
   const [avatarCode, setAvatarCode] = useState(avatar);
@@ -66,11 +68,22 @@ export default function FormPlayer({
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      const { data } = await axios.post(`/api/players/${playerId}`, {
-        ...values,
-        avatar: avatarCode,
-        image: file,
+      const formData = new FormData();
+
+      formData.append("name", values.name);
+      formData.append("description", values.description || "");
+      formData.append("avatar", avatarCode || "");
+
+      if (file) {
+        formData.append("file", file);
+      }
+
+      const { data } = await axios.post(`/api/players/${playerId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
+
       toast({
         title: "Success",
         description: "Update player success",
@@ -81,13 +94,6 @@ export default function FormPlayer({
       console.log(err);
     }
   }
-
-  // async function handleUpload() {
-  //   try {
-  //   } catch (err: any) {
-  //     console.log();
-  //   }
-  // }
 
   return (
     <>
@@ -129,6 +135,14 @@ export default function FormPlayer({
                 {previewImage ? (
                   <Image
                     src={previewImage}
+                    alt="Image"
+                    width={200}
+                    height={200}
+                    className="rounded-full border aspect-square object-contain object-center"
+                  />
+                ) : image ? (
+                  <Image
+                    src={"/uploads/" + image}
                     alt="Image"
                     width={200}
                     height={200}
